@@ -1,13 +1,14 @@
 """
-Server-side code
-
 To perform Key Exchange for authenticated message transmission.
 
 Uses ECDH for Key Exchange.
 """
 
 import base64
-import typing_extensions as typing
+try:
+    from typing import Self
+except Exception:
+    from typing_extensions import Self
 
 from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey
 from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PublicKey
@@ -15,10 +16,10 @@ from cryptography.hazmat.primitives.hashes import SHA256
 from cryptography.hazmat.primitives.kdf.hkdf import HKDF
 
 class KeyExchanger:
-    def __init__(self: typing.Self) -> None:
+    def __init__(self: Self) -> None:
         self._key = X25519PrivateKey.generate()
 
-    def derive(self: typing.Self, client_key: str) -> bytes:
+    def derive(self: Self, client_key: str) -> bytes:
         """
         Parameters
         ------
@@ -40,7 +41,7 @@ class KeyExchanger:
         ).derive(shared_key)
 
     @property
-    def public_key(self: typing.Self) -> X25519PublicKey:
+    def public_key(self: Self) -> X25519PublicKey:
         return base64.urlsafe_b64encode(
             self._key.public_key().public_bytes_raw()
         )

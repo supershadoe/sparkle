@@ -3,6 +3,8 @@ import time
 from src.encrypt import Encryptor, Decryptor
 from src.key_exchange import KeyExchanger
 
+image_path = 'grey.jpeg'
+
 server_exchanger = KeyExchanger()
 
 # Perform key exchange using ECDH
@@ -10,7 +12,7 @@ client_exchanger = KeyExchanger()
 client_derived_key = client_exchanger.derive(server_exchanger.public_key)
 plaintext = b'This is a secret.'
 start = time.time()
-nonce, ciphertext = Encryptor.encrypt(plaintext, client_derived_key)
+nonce, ciphertext = Encryptor().encrypt(plaintext, client_derived_key)
 end = time.time()
 print(
     'Client side\n'
