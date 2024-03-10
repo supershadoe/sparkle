@@ -8,7 +8,7 @@ Uses ECDH for Key Exchange.
 
 import base64
 import os
-import typing
+import typing_extensions as typing
 
 from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey
 from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PublicKey
