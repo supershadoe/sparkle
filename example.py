@@ -1,16 +1,16 @@
 import time
 
-from src.client import ClientSideExchanger, Encryptor
-from src.server import ServerSideExchanger, Decryptor
+from src.encrypt import Encryptor, Decryptor
+from src.key_exchange import KeyExchanger
 
-server_exchanger = ServerSideExchanger()
+server_exchanger = KeyExchanger()
 
 # Perform key exchange using ECDH
-client_exchanger = ClientSideExchanger()
-client_exchanger.derive(server_exchanger.public_key)
+client_exchanger = KeyExchanger()
+client_derived_key = client_exchanger.derive(server_exchanger.public_key)
 plaintext = b'This is a secret.'
 start = time.time()
-nonce, ciphertext = Encryptor.encrypt(plaintext, client_exchanger.derived_key)
+nonce, ciphertext = Encryptor.encrypt(plaintext, client_derived_key)
 end = time.time()
 print(
     'Client side\n'
@@ -19,6 +19,6 @@ print(
     f'Time to encrypt: {end - start}'
 )
 
-derived_key = server_exchanger.derive(client_exchanger.public_key)
-server_plaintext = Decryptor.decrypt(ciphertext, derived_key, nonce)
+server_derived_key = server_exchanger.derive(client_exchanger.public_key)
+server_plaintext = Decryptor.decrypt(ciphertext, server_derived_key, nonce)
 print(f'\nServer side\nDecrypted text: {server_plaintext}')
